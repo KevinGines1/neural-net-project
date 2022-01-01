@@ -1,4 +1,4 @@
-from loadData import *
+from data_utils import *
 
 # * load Data from the files
 mathDataHeaders, mathDataList = loadData('../student-data/student-mat.csv')
