@@ -108,8 +108,3 @@ def encodeData(dataList, dataHeaders):
     encodedDataList.append(encodedData)
     encodedData = []
   return encodedDataList
-
-def initializeWeights(): # randomizes a number from 0.0 to 0.1
-    exp = random.randint(-19, -1)
-    significand = 0.9 * random.random() + 0.1
-    return significand * 10**exp
