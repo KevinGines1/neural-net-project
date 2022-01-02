@@ -112,5 +112,5 @@ def encodeData(dataList, dataHeaders):
 def getTargetOutputs(dataList):
   targetColumn = []
   for data in dataList: 
-    targetColumn.append(data.pop((len(data)-1)))
+    targetColumn.append(data.pop())
   return dataList, targetColumn

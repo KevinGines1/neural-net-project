@@ -1,4 +1,5 @@
 from data_utils import *
+from neuralNet_utils import *
 import numpy as np
 
 # * load Data from the files
@@ -16,24 +17,31 @@ shuffleData(portugalDataList)
 mathTraining, mathValidation, mathTesting = subSamples(mathDataList, 0.40, 0.30)
 portugalTraining, portugalValidation, portugalTesting = subSamples(portugalDataList, 0.40, 0.30)
 
-# * from the data lists, we separate the output column (G3) 
-mathTraining, mathTrainingTargets = getTargetOutputs(mathTraining)
-mathValidation, mathValidationTargets = getTargetOutputs(mathTraining)
-mathTesting, mathTestingTargets = getTargetOutputs(mathTraining)
+# * from the data lists, we separate the output column (G3)
+# print(len(mathTraining[0]))
+# print(mathTraining[0])
 
-portugalTraining, portugalTrainingTargets = getTargetOutputs(mathTraining)
-portugalValidation, portugalValidationTargets = getTargetOutputs(mathTraining)
-portugalTesting, portugalTestingTargets = getTargetOutputs(mathTraining)
+mathTraining, mathTrainingTargets = getTargetOutputs(mathTraining)
+mathValidation, mathValidationTargets = getTargetOutputs(mathValidation)
+mathTesting, mathTestingTargets = getTargetOutputs(mathTesting)
+
+portugalTraining, portugalTrainingTargets = getTargetOutputs(portugalTraining)
+portugalValidation, portugalValidationTargets = getTargetOutputs(portugalTraining)
+portugalTesting, portugalTestingTargets = getTargetOutputs(portugalTraining)
+
+# print(len(mathTraining[0]))
+# print(mathTraining[0])
+# print(mathTrainingTargets[0])
 
 # print(len(mathTraining),len(mathValidation), len(mathTesting))
 # print(len(portugalTraining),len(portugalValidation), len(portugalTesting))
 
 # test = initializeWeights()
 # print(test)
-# * initialize the weights for the hidden nodes (33-23-1 network: 33x23 weights + 23 bias weights = 782)
+# * initialize the weights for the hidden nodes (32-22-1 network: 32x22 weights + 22 bias weights = 726)
 # hiddenNodeWeights = [ initializeWeights() for _ in range(759)]
-hiddenNodeWeights = np.random.uniform(0.0, 0.1, (23, 33)) # 33 weights for the 23 hidden nodes
-hiddenNodeBiasWeights = np.random.uniform(0.0, 0.1, 23) # bias weights for each hidden node
+hiddenNodeWeights = np.random.uniform(0.0, 0.1, (22, 32)) # 32 weights for the 23 hidden nodes
+hiddenNodeBiasWeights = np.random.uniform(0.0, 0.1, 22) # bias weights for each hidden node
 
 # print(hiddenNodeWeights)
 # print(hiddenNodeBiasWeights)
@@ -42,10 +50,23 @@ hiddenNodeBiasWeights = np.random.uniform(0.0, 0.1, 23) # bias weights for each 
 # half of the nodes will be 1 and the other half will be -1, since there is odd number, bias node is 0
 outputNodeWeights = [
   1,1,1,1,1,1,
-  1,1,1,1,1,1,
-  -1,-1,-1,-1,-1,-1,
+  1,1,1,1,1,-1,
+  -1,-1,-1,-1,-1,
   -1,-1,-1,-1,-1
 ]
 outputNodeBiasWeight = 0
 
+# * initialize other needed values for the neural network
+numEpoch = 1
+learningRate = 1 # as good as gone haha
+
+# ! TRAINING
+# * MATHEMATICS
+trainNeuralNetwork(1, learningRate, mathTraining, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, mathTrainingTargets)
+
+
+# ! VALIDATING
+correctPredictionCount = 0
+correctPredictionCount = validateNetWork(mathValidation, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, mathValidationTargets)
+print(correctPredictionCount)
 
