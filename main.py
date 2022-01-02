@@ -14,3 +14,22 @@ portugalTraining, portugalValidation, portugalTesting = subSamples(portugalDataL
 
 # print(len(mathTraining),len(mathValidation), len(mathTesting))
 # print(len(portugalTraining),len(portugalValidation), len(portugalTesting))
+
+# test = initializeWeights()
+# print(test)
+# * initialize the weights for the hidden nodes (33-23-1 network: 33x23 weights + 23 bias weights = 782)
+hiddenNodeWeights = [ initializeWeights() for _ in range(759)]
+hiddenNodeBiasWeights = [ initializeWeights() for _ in range(23)]
+
+# print(hiddenNodeWeights)
+# print(hiddenNodeBiasWeights)
+
+# * initialize the weights for the output node (1 output node: 23 hidden nodes connecting + 1 bias weight)
+# half of the nodes will be 1 and the other half will be -1, since there is odd number, bias node is 0
+outputNodeWeights = [
+  1,1,1,1,1,1
+  1,1,1,1,1,1
+  -1,-1,-1,-1,-1,-1
+  -1,-1,-1,-1,-1
+]
+outputNodeBiasWeight = 0
