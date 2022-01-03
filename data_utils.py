@@ -39,6 +39,7 @@ def encodeData(dataList, dataHeaders):
     #* it only applies to this specific dataset
   encodedDataList = []
   encodedData = []
+
   for data in dataList: 
     for i in range(len(data)):
       if(dataHeaders[i] == 'school'):
@@ -66,51 +67,106 @@ def encodeData(dataList, dataHeaders):
           encodedData.append(0.1)
         else:
           encodedData.append(0.99) # for apart
-      elif(dataHeaders[i] == 'Mjob' or dataHeaders[i] == 'Fjob'):
+      elif(dataHeaders[i] == 'Mjob' or dataHeaders[i] == 'Fjob'): # normalize the values after representing the values
         if(data[i] == 'teacher'):
-          encodedData.append(0.1)
+          encodedData.append(normalizeValue(0, 4, 0))
         elif(data[i] == 'health'):
-          encodedData.append(1)
+          encodedData.append(normalizeValue(1, 4, 0))
         elif(data[i] == 'services'):
-          encodedData.append(2)
+          encodedData.append(normalizeValue(2, 4, 0))
         elif(data[i] == 'at_home'):
-          encodedData.append(3)
+          encodedData.append(normalizeValue(3, 4, 0))
         else:
-          encodedData.append(4) # other
+          encodedData.append(normalizeValue(4, 4, 0))
       elif(dataHeaders[i] == 'reason'):
         if(data[i] == 'home'): # close to home
-          encodedData.append(0.1)
+          encodedData.append(normalizeValue(0, 3, 0))
         elif(data[i] == 'reputation'): # school reputation
-          encodedData.append(1)
+          encodedData.append(normalizeValue(1, 3, 0))
         elif(data[i] == 'course'): # course preference
-          encodedData.append(2)
+          encodedData.append(normalizeValue(2, 3, 0))
         else:
-          encodedData.append(3) # other
+          encodedData.append(normalizeValue(3, 3, 0))
       elif(dataHeaders[i] == 'guardian'):
         if(data[i] == 'mother'):
-          encodedData.append(0.1)
+          encodedData.append(normalizeValue(0, 2, 0))
         elif(data[i] == 'father'):
-          encodedData.append(1)
+          encodedData.append(normalizeValue(1, 2, 0))
         else:
-          encodedData.append(2) # other
+          encodedData.append(normalizeValue(2, 2, 0))
       elif(dataHeaders[i] in ['schoolsup','famsup', 'paid', 'activities', 'nursery', 'higher', 'internet', 'romantic']):
         if(data[i] == 'no'):
           encodedData.append(0.1)
         else:
-          encodedData.append(1) # yes
-      else:
+          encodedData.append(0.99) # yes
+      elif(dataHeaders[i] in ['freetime','goout', 'Dalc', 'Walc', 'health', 'famrel']): # values ranging 1-5 will be normalized
         try:
-          encodedData.append(int(data[i])) # value of data need not to be encoded
+          value = int(data[i])
         except:
           cleanString = data[i].lstrip('\'').rstrip('\'')
           cleanerString = data[i].lstrip('\"').rstrip('\"')
-          encodedData.append(int(cleanerString))
+          value = int(cleanerString)
+        encodedData.append(normalizeValue(value, 5, 1))
+      elif(dataHeaders[i] in ['traveltime', 'studytime', 'failures']): # values ranging 1-4 will be normalized
+        try:
+          value = int(data[i])
+        except:
+          cleanString = data[i].lstrip('\'').rstrip('\'')
+          cleanerString = data[i].lstrip('\"').rstrip('\"')
+          value = int(cleanerString)
+        encodedData.append(normalizeValue(value, 4, 1))
+      elif(dataHeaders[i] in ['Medu', 'Fedu']): # values ranging 0-4 will be normalized
+        try:
+          value = int(data[i])
+        except:
+          cleanString = data[i].lstrip('\'').rstrip('\'')
+          cleanerString = data[i].lstrip('\"').rstrip('\"')
+          value = int(cleanerString)
+        encodedData.append(normalizeValue(value, 4, 0))
+      elif(dataHeaders[i] in ['G1', 'G2', 'G3']): # values ranging 0-20 will be normalized
+        try:
+          value = int(data[i])
+        except:
+          cleanString = data[i].lstrip('\'').rstrip('\'')
+          cleanerString = data[i].lstrip('\"').rstrip('\"')
+          value = int(cleanerString)
+        encodedData.append(normalizeValue(value, 20, 0))
+      elif(dataHeaders[i] == 'age'): # values ranging 15-22 will be normalized
+        try:
+          value = int(data[i])
+        except:
+          cleanString = data[i].lstrip('\'').rstrip('\'')
+          cleanerString = data[i].lstrip('\"').rstrip('\"')
+          value = int(cleanerString)
+        encodedData.append(normalizeValue(value, 22, 15))
+      elif(dataHeaders[i] == 'absences'): # values ranging 0-93 will be normalized
+        try:
+          value = int(data[i])
+        except:
+          cleanString = data[i].lstrip('\'').rstrip('\'')
+          cleanerString = data[i].lstrip('\"').rstrip('\"')
+          value = int(cleanerString)
+        encodedData.append(normalizeValue(value, 93, 0))
+    
     encodedDataList.append(encodedData)
     encodedData = []
+    
   return encodedDataList
 
+def normalizeValue(value, Vmax, Vmin): # normalize the value to 0.1-0.9
+  Tmax = 0.9 # max value of the target
+  Tmin = 0.1 # min value of the target
+  Tfactor = Tmax - Tmin
+  V_denom = Vmax-Vmin
+
+  return Tmin + (((value-Vmin)/V_denom)*Tfactor)
+  
 def getTargetOutputs(dataList):
   targetColumn = []
   for data in dataList: 
-    targetColumn.append(data.pop())
+    targetColumn.append(data.pop()) # get the target output
+    # Tar = normalizeValue(data.pop(), 20, 0) # get the raw target output
+    # encode the target value
+    # targetColumn.append(Tar)
   return dataList, targetColumn
+

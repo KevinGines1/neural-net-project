@@ -7,6 +7,8 @@ mathDataHeaders, mathDataList = loadData('../student-data/student-mat.csv')
 portugalDataHeaders, portugalDataList = loadData('../student-data/student-por.csv')
 
 # print(mathDataHeaders)
+# print(len(mathDataList[0]))
+# print(portugalDataList)
 # print(portugalDataHeaders)
 
 # * shuffle the data lists -- this could be optional, i think
@@ -17,7 +19,7 @@ shuffleData(portugalDataList)
 mathTraining, mathValidation, mathTesting = subSamples(mathDataList, 0.40, 0.30)
 portugalTraining, portugalValidation, portugalTesting = subSamples(portugalDataList, 0.40, 0.30)
 
-# * from the data lists, we separate the output column (G3)
+# * from the data lists, we separate the output column (G3) and encode them
 # print(len(mathTraining[0]))
 # print(mathTraining[0])
 
@@ -31,7 +33,7 @@ portugalTesting, portugalTestingTargets = getTargetOutputs(portugalTraining)
 
 # print(len(mathTraining[0]))
 # print(mathTraining[0])
-# print(mathTrainingTargets[0])
+# print('==============\n',mathTrainingTargets)
 
 # print(len(mathTraining),len(mathValidation), len(mathTesting))
 # print(len(portugalTraining),len(portugalValidation), len(portugalTesting))
@@ -54,19 +56,30 @@ outputNodeWeights = [
   -1,-1,-1,-1,-1,
   -1,-1,-1,-1,-1
 ]
-outputNodeBiasWeight = 0
+outputNodeBiasWeight = 0.01
 
 # * initialize other needed values for the neural network
 numEpoch = 1
-learningRate = 1 # as good as gone haha
+learningRate = 0.4 # as good as gone haha
 
 # ! TRAINING
 # * MATHEMATICS
-trainNeuralNetwork(1, learningRate, mathTraining, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, mathTrainingTargets)
+# print(hiddenNodeWeights[0])
+# print(hiddenNodeBiasWeights[0])
+# print(outputNodeWeights[0])
+# print(outputNodeBiasWeight)
+trainNeuralNetwork(numEpoch, learningRate, mathTraining, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, mathTrainingTargets)
+# print(hiddenNodeWeights[0])
+# print(hiddenNodeBiasWeights[0])
+# print(outputNodeWeights[0])
+# print(outputNodeBiasWeight)
+
 
 
 # ! VALIDATING
 correctPredictionCount = 0
 correctPredictionCount = validateNetWork(mathValidation, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, mathValidationTargets)
 print(correctPredictionCount)
+
+# TODO: ENCODE THE OUTPUTS (TARGET ARRAYS FOR EACH DATASET) YOU'RE FUCKING ALMMOST THERE BITCH. HOLY FUCKING SHIT.
 
