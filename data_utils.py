@@ -123,7 +123,7 @@ def encodeData(dataList, dataHeaders):
           cleanerString = data[i].lstrip('\"').rstrip('\"')
           value = int(cleanerString)
         encodedData.append(normalizeValue(value, 4, 0))
-      elif(dataHeaders[i] in ['G1', 'G2', 'G3']): # values ranging 0-20 will be normalized
+      elif(dataHeaders[i] in ['G1', 'G2']): # values ranging 0-20 will be normalized
         try:
           value = int(data[i])
         except:
@@ -131,6 +131,17 @@ def encodeData(dataList, dataHeaders):
           cleanerString = data[i].lstrip('\"').rstrip('\"')
           value = int(cleanerString)
         encodedData.append(normalizeValue(value, 20, 0))
+      elif(dataHeaders[i] == 'G3'): # convert to binary
+        try:
+          value = int(data[i])
+        except:
+          cleanString = data[i].lstrip('\'').rstrip('\'')
+          cleanerString = data[i].lstrip('\"').rstrip('\"')
+          value = int(cleanerString)
+        if(value >= 10):
+          encodedData.append(1) # PASS
+        else: 
+          encodedData.append(0) # FAIL
       elif(dataHeaders[i] == 'age'): # values ranging 15-22 will be normalized
         try:
           value = int(data[i])

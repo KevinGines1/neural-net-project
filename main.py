@@ -56,30 +56,22 @@ outputNodeWeights = [
   -1,-1,-1,-1,-1,
   -1,-1,-1,-1,-1
 ]
-outputNodeBiasWeight = 0.01
+outputNodeBiasWeight = 0.1
 
 # * initialize other needed values for the neural network
-numEpoch = 1
+numEpoch = 100
 learningRate = 0.4 # as good as gone haha
-
+epoch = 0
 # ! TRAINING
-# * MATHEMATICS
-# print(hiddenNodeWeights[0])
-# print(hiddenNodeBiasWeights[0])
-# print(outputNodeWeights[0])
-# print(outputNodeBiasWeight)
-trainNeuralNetwork(numEpoch, learningRate, mathTraining, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, mathTrainingTargets)
-# print(hiddenNodeWeights[0])
-# print(hiddenNodeBiasWeights[0])
-# print(outputNodeWeights[0])
-# print(outputNodeBiasWeight)
+percentageCorrectClassification = 0
+while(percentageCorrectClassification < 50):
+  # trainNeuralNetwork(numEpoch, learningRate, mathTraining, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, mathTrainingTargets)
+  trainNeuralNetwork(numEpoch, learningRate, portugalTraining, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, portugalTrainingTargets)
 
 
-
-# ! VALIDATING
-correctPredictionCount = 0
-correctPredictionCount = validateNetWork(mathValidation, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, mathValidationTargets)
-print(correctPredictionCount)
-
-# TODO: ENCODE THE OUTPUTS (TARGET ARRAYS FOR EACH DATASET) YOU'RE FUCKING ALMMOST THERE BITCH. HOLY FUCKING SHIT.
-
+  # ! VALIDATING
+  correctPredictionCount = 0
+  # correctPredictionCount, percentageCorrectClassification = validateNetWork(mathValidation, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, mathValidationTargets)
+  correctPredictionCount, percentageCorrectClassification = validateNetWork(portugalTraining, hiddenNodeWeights, hiddenNodeBiasWeights, outputNodeWeights, outputNodeBiasWeight, portugalTrainingTargets)
+  epoch += 1
+  print(epoch, correctPredictionCount, percentageCorrectClassification)
